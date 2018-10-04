@@ -4,8 +4,25 @@ class MoviesController < ApplicationController
     params.require(:movie).permit(:title, :rating, :description, :release_date, :director)
   end
 
+
+  def same_director
+    
+  end
+
   def show
     id = params[:id] # retrieve movie ID from URI route
+    
+    
+    if params[:page] == "/movies/same_director" # find the movies that match the current director
+                             # pass these movies into your same director view
+      #@movie = Movie.find()
+      redirect_to movies_same_director_path, :my_director => @movie.director
+      #redirect_to movies_path(:sort_list => session[:sort_list], :ratings => session[:ratings])
+    
+    elseif
+      
+    end
+    
     @movie = Movie.find(id) # look up movie by unique ID
     # will render app/views/movies/show.<extension> by default
   end
