@@ -5,8 +5,8 @@ class MoviesController < ApplicationController
   end
 
 
-  def same_director
-    
+  def same_director ()
+    @movies = Movie.all
   end
 
   def show
