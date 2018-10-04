@@ -22,7 +22,7 @@ module NavigationHelpers
       edit_movie_path(myMovieID)
       #'/movies/' + myMovieID +'/edit'
     
-    when /^the\s?show\s?page\s?for "(.*)"$/
+    when /^the\s?details\s?page\s?for "(.*)"$/
       myMovieID = Movie.find_by_title($1).id.to_s
       movie_path(myMovieID)
       #'/movies/' + myMovieID 

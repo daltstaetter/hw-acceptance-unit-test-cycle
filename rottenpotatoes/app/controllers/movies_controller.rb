@@ -5,8 +5,11 @@ class MoviesController < ApplicationController
   end
 
 
-  def same_director ()
-    @movies = Movie.all
+  def same_director
+    movie_entry_in_db = params[:movie_id]
+    @match = Movie.find(movie_entry_in_db)
+    
+    @movies = Movie.where("director in (?)", @match.director)
   end
 
   def show
@@ -15,12 +18,7 @@ class MoviesController < ApplicationController
     
     if params[:page] == "/movies/same_director" # find the movies that match the current director
                              # pass these movies into your same director view
-      #@movie = Movie.find()
       redirect_to movies_same_director_path, :my_director => @movie.director
-      #redirect_to movies_path(:sort_list => session[:sort_list], :ratings => session[:ratings])
-    
-    elseif
-      
     end
     
     @movie = Movie.find(id) # look up movie by unique ID
