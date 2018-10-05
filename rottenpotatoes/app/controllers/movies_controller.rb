@@ -6,20 +6,26 @@ class MoviesController < ApplicationController
 
 
   def same_director
-    movie_entry_in_db = params[:movie_id]
+    movie_entry_in_db = params[:id]
     @match = Movie.find(movie_entry_in_db)
     
-    @movies = Movie.where("director in (?)", @match.director)
+    if @match.director == nil or @match.director == ''
+      flash[:notice] = "'#{@match.title}' has no director info"
+      redirect_to movies_path
+    else
+      @movies = Movie.where("director in (?)", @match.director) || ''
+    end
+    
   end
 
   def show
     id = params[:id] # retrieve movie ID from URI route
     
     
-    if params[:page] == "/movies/same_director" # find the movies that match the current director
-                             # pass these movies into your same director view
-      redirect_to movies_same_director_path, :my_director => @movie.director
-    end
+    #if params[:page] == "/movies/same_director" # find the movies that match the current director
+    #                         # pass these movies into your same director view
+    #  redirect_to movie_same_director_path, :my_director => @movie.director
+    #end
     
     @movie = Movie.find(id) # look up movie by unique ID
     # will render app/views/movies/show.<extension> by default

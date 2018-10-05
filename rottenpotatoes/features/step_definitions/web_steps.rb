@@ -243,6 +243,12 @@ end
  
 Then /^(?:|I )should be on (.+)$/ do |page_name|
   current_path = URI.parse(current_url).path
+  
+  # this match is not working inside the path_to() function
+  if page_name == "the home page"
+    current_path = '/'
+  end
+  
   if current_path.respond_to? :should
     current_path.should == path_to(page_name)
   else

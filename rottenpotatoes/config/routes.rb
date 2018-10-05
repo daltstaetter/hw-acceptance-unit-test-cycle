@@ -4,6 +4,11 @@ Rottenpotatoes::Application.routes.draw do
   root 'movies#index'
   #root :to => redirect('/movies')
   resources :movies do
-    get "same_director" # points to same_director haml
+    member do
+      get "same_director", {to: "movies#same_director", as: :same_director}
+    end
+    
   end
+ 
+  #get "/movies/:id/same_director", {to: "movies#same_director", as: :same_director}
 end

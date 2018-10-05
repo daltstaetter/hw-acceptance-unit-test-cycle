@@ -1,0 +1,17 @@
+-#  This file is app/views/movies/index.html.haml
+%h1 Movies by Same Director
+
+%table#movies
+  %thead
+    %tr
+      %th= 'Movie Title'
+      %th= 'Rating'
+      %th= 'Release Date'
+  %tbody
+    - @movies.each do |movie|
+      %tr
+        %td= movie.title 
+        %td= movie.rating
+        %td= movie.release_date
+
+= link_to('Back to movie list', movies_path)
