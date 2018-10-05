@@ -1,0 +1,114 @@
+
+Should not find movie in empty database
+  should not be defined
+
+Find Empty String in Database
+  should raise error
+
+Finished in 0.00687 seconds (files took 0.10224 seconds to load)
+2 examples, 0 failures
+
+Using the default profile...
+Feature: Create A New Movie Entry
+    As a movie watcher
+    So I can update the movies page with newly reviewed movies
+    I want to create a movie 
+
+  Background: movies in database      # features/CreateNewMovie.feature:7
+    Given the following movies exist: # features/step_definitions/web_steps.rb:48
+      | title        | rating | director     | release_date |
+      | Star Wars    | PG     | George Lucas | 1977-05-25   |
+      | Blade Runner | PG     | Ridley Scott | 1982-06-25   |
+      | Alien        | R      |              | 1979-05-25   |
+      | THX-1138     | R      | George Lucas | 1971-03-11   |
+
+  Scenario: Creating a new movie                          # features/CreateNewMovie.feature:17
+    When I am on the home page                            # features/step_definitions/web_steps.rb:44
+    And I follow "Add new movie"                          # features/step_definitions/web_steps.rb:70
+    And I fill in "Title" with "Superman"                 # features/step_definitions/web_steps.rb:74
+    And I select "PG-13" from "Rating"                    # features/step_definitions/web_steps.rb:99
+    And I select "2018" from "movie[release_date(1i)]"    # features/step_definitions/web_steps.rb:99
+    And I select "October" from "movie[release_date(2i)]" # features/step_definitions/web_steps.rb:99
+    And I select "25" from "movie[release_date(3i)]"      # features/step_definitions/web_steps.rb:99
+    And I press "Save Changes"                            # features/step_definitions/web_steps.rb:66
+    Then I should see "PG-13"                             # features/step_definitions/web_steps.rb:119
+    Then I should see "Superman"                          # features/step_definitions/web_steps.rb:119
+
+Feature: Destroy A Movie Entry
+    As a movie watcher
+    So I can update the movies page
+    I want to destroy a movie 
+
+  Background: movies in database      # features/DestroyMovie.feature:7
+    Given the following movies exist: # features/step_definitions/web_steps.rb:48
+      | title        | rating | director     | release_date |
+      | Star Wars    | PG     | George Lucas | 1977-05-25   |
+      | Blade Runner | PG     | Ridley Scott | 1982-06-25   |
+      | Alien        | R      |              | 1979-05-25   |
+      | THX-1138     | R      | George Lucas | 1971-03-11   |
+
+  Scenario: Destroy a movie                       # features/DestroyMovie.feature:17
+    When I am on the details page for "THX-1138"  # features/step_definitions/web_steps.rb:44
+    And I press "Delete"                          # features/step_definitions/web_steps.rb:66
+    Then I should see "Movie 'THX-1138' deleted." # features/step_definitions/web_steps.rb:119
+
+  Scenario: Navigate back to home page               # features/DestroyMovie.feature:23
+    When I am on the details page for "Blade Runner" # features/step_definitions/web_steps.rb:44
+    And I follow "Back to movie list"                # features/step_definitions/web_steps.rb:70
+    Then I should be on the home page                # features/step_definitions/web_steps.rb:244
+
+Feature: Get back to the home page
+    As a movie watcher
+    So I can navigate the rotten potatoes page
+    I want to get back to the home page
+
+  Background: movies in database      # features/NavigatePages.feature:7
+    Given the following movies exist: # features/step_definitions/web_steps.rb:48
+      | title        | rating | director     | release_date |
+      | Star Wars    | PG     | George Lucas | 1977-05-25   |
+      | Blade Runner | PG     | Ridley Scott | 1982-06-25   |
+      | Alien        | R      |              | 1979-05-25   |
+      | THX-1138     | R      | George Lucas | 1971-03-11   |
+
+  Scenario: Navigate back to home page               # features/NavigatePages.feature:17
+    When I am on the details page for "Blade Runner" # features/step_definitions/web_steps.rb:44
+    And I follow "Back to movie list"                # features/step_definitions/web_steps.rb:70
+    Then I should be on the home page                # features/step_definitions/web_steps.rb:244
+
+Feature: search for movies by director
+  As a movie buff
+  So that I can find movies with my favorite director
+  I want to include and serach on director information in movies I enter
+
+  Background: movies in database      # features/SearchByDirector.feature:7
+    Given the following movies exist: # features/step_definitions/web_steps.rb:48
+      | title        | rating | director     | release_date |
+      | Star Wars    | PG     | George Lucas | 1977-05-25   |
+      | Blade Runner | PG     | Ridley Scott | 1982-06-25   |
+      | Alien        | R      |              | 1979-05-25   |
+      | THX-1138     | R      | George Lucas | 1971-03-11   |
+
+  Scenario: add director to existing movie                # features/SearchByDirector.feature:16
+    When I go to the edit page for "Alien"                # features/step_definitions/web_steps.rb:62
+    And I fill in "Director" with "Ridley Scott"          # features/step_definitions/web_steps.rb:74
+    And I press "Update Movie Info"                       # features/step_definitions/web_steps.rb:66
+    Then the director of "Alien" should be "Ridley Scott" # features/step_definitions/web_steps.rb:56
+
+  Scenario: find movie with same director                       # features/SearchByDirector.feature:22
+    Given I am on the details page for "Star Wars"              # features/step_definitions/web_steps.rb:44
+    When I follow "Find Movies With Same Director"              # features/step_definitions/web_steps.rb:70
+    Then I should be on the Similar Movies page for "Star Wars" # features/step_definitions/web_steps.rb:244
+    And I should see "THX-1138"                                 # features/step_definitions/web_steps.rb:119
+    But I should not see "Blade Runner"                         # features/step_definitions/web_steps.rb:137
+
+  Scenario: can't find similar movies if we don't know director (sad path) # features/SearchByDirector.feature:29
+    Given I am on the details page for "Alien"                             # features/step_definitions/web_steps.rb:44
+    Then I should not see "Ridley Scott"                                   # features/step_definitions/web_steps.rb:137
+    When I follow "Find Movies With Same Director"                         # features/step_definitions/web_steps.rb:70
+    Then I should be on the home page                                      # features/step_definitions/web_steps.rb:244
+    And I should see "'Alien' has no director info"                        # features/step_definitions/web_steps.rb:119
+
+7 scenarios (7 passed)
+40 steps (40 passed)
+0m0.404s
+Coverage report generated for Cucumber Features to /home/ec2-user/environment/hw-acceptance-unit-test-cycle/rottenpotatoes/coverage. 48 / 56 LOC (85.71%) covered.
