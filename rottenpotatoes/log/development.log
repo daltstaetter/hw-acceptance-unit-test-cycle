@@ -5477,3 +5477,25 @@ Started GET "/movies/new" for 47.218.214.12 at 2018-10-05 05:57:00 +0000
 Processing by MoviesController#new as HTML
   Rendered movies/new.html.haml within layouts/application (4.0ms)
 Completed 200 OK in 19ms (Views: 18.3ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/" for 47.218.214.12 at 2018-10-05 06:23:38 +0000
+Processing by MoviesController#index as HTML
+Redirected to https://b750005b7b774efba1e70fac8102a77f.vfs.cloud9.us-east-2.amazonaws.com/?ratings%5BG%5D=1&ratings%5BPG%5D=1&ratings%5BPG-13%5D=1&ratings%5BR%5D=1&sort=title
+Completed 302 Found in 27ms (ActiveRecord: 0.0ms)
+
+
+Started GET "/?ratings%5BG%5D=1&ratings%5BPG%5D=1&ratings%5BPG-13%5D=1&ratings%5BR%5D=1&sort=title" for 47.218.214.12 at 2018-10-05 06:23:38 +0000
+Processing by MoviesController#index as HTML
+  Parameters: {"ratings"=>{"G"=>"1", "PG"=>"1", "PG-13"=>"1", "R"=>"1"}, "sort"=>"title"}
+  [1m[36mMovie Load (0.2ms)[0m  [1mSELECT "movies".* FROM "movies" WHERE "movies"."rating" IN ('G', 'PG', 'PG-13', 'R')  ORDER BY "movies"."title" ASC[0m
+  Rendered movies/index.html.haml within layouts/application (14.9ms)
+Completed 200 OK in 181ms (Views: 177.0ms | ActiveRecord: 1.3ms)
+
+
+Started GET "/movies/5" for 47.218.214.12 at 2018-10-05 06:23:59 +0000
+Processing by MoviesController#show as HTML
+  Parameters: {"id"=>"5"}
+  [1m[35mMovie Load (0.2ms)[0m  SELECT  "movies".* FROM "movies" WHERE "movies"."id" = ? LIMIT 1  [["id", 5]]
+  Rendered movies/show.html.haml within layouts/application (2.5ms)
+Completed 200 OK in 12ms (Views: 9.3ms | ActiveRecord: 0.2ms)
